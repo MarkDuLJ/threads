@@ -56,6 +56,8 @@ function AccountProfile({user, btnTitle}:Props){
 
      // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof UserValidation>) {
+        const blob = values.profile_photo;
+        const hasImageChanged = isBase64Image(blob)
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)

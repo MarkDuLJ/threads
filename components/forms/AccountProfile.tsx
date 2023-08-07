@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import * as z from "zod"
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
+import { isBase64Image } from "@/lib/utils";
+import { useUploadThing } from "@/lib/uploadthing";
 
 interface Props {
     user:{
@@ -25,6 +27,7 @@ interface Props {
 
 function AccountProfile({user, btnTitle}:Props){
     const [files, setFiles]=useState<File[]>([])
+    const {startUpload} = useUploadThing("media")
 
     const form = useForm({
         resolver:zodResolver(UserValidation),
@@ -55,12 +58,16 @@ function AccountProfile({user, btnTitle}:Props){
     }
 
      // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof UserValidation>) {
+    const onSubmit = async (values: z.infer<typeof UserValidation>) =>{
         const blob = values.profile_photo;
         const hasImageChanged = isBase64Image(blob)
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+        if(hasImageChanged){
+            const imgRes = await startUpload(files)
+
+            if(imgRes&&imgRes[0].fileUrl){
+                values.profile_photo = imgRes[0].fileUrl
+            }
+        }
     }
 
     return (
@@ -138,7 +145,7 @@ function AccountProfile({user, btnTitle}:Props){
                     </FormItem>
                 )}
                 />
-                <Button type="submit" className="bg-primary-500">Submit</Button>
+                <Button type="submit" className="bg-primary-200" >Submit</Button>
             </form>
         </Form>
     )

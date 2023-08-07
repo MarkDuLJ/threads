@@ -4,7 +4,7 @@ import {Inter} from "next/font/google"
 import "../globals.css"
 
 export const metadata={
-    title:"threads",
+    title:"hreads",
     description:"a nextjs 13 app..."
 }
 

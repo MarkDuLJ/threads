@@ -69,22 +69,22 @@ function AccountProfile({user, btnTitle}:Props){
                 name="profile_photo"
                 render={({ field }) => (
                     <FormItem className="flex items-center gap-4">
-                    <FormLabel className="account-form_image-label">
-                        {field.value?(
-                            <Image src={field.value} alt="profile photo" width={96} height={96} priority className="rounded-full object-contain"/>
-                            ):(
-                            <Image src='/svgs/profile.svg' alt="profile photo" width={48} height={49} priority className="object-contain"/>
-                        )}
-                        </FormLabel>
-                    <FormControl className="flex-1 text-base-semibold text-gray-200">
-                        <Input 
-                            type="file"
-                            accept="image/*"
-                            placeholder="upload a photo"
-                            className="account-form_image-input"
-                            onChange={e=>handleImage(e,field.onChange)}
-                            />
-                    </FormControl>
+                        <FormLabel className="account-form_image-label">
+                            {field.value?(
+                                <Image src={field.value} alt="profile photo" width={96} height={96} priority className="rounded-full object-contain"/>
+                                ):(
+                                <Image src='/svgs/profile.svg' alt="profile photo" width={48} height={48} priority className="object-contain"/>
+                            )}
+                            </FormLabel>
+                        <FormControl className="flex-1 text-base-semibold text-gray-200">
+                            <Input 
+                                type="file"
+                                accept="image/*"
+                                placeholder="upload a photo"
+                                className="account-form_image-input"
+                                onChange={e=>handleImage(e,field.onChange)}
+                                />
+                        </FormControl>
                     </FormItem>
                 )}
                 />
@@ -136,7 +136,7 @@ function AccountProfile({user, btnTitle}:Props){
                     </FormItem>
                 )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button type="submit" className="bg-primary-500">Submit</Button>
             </form>
         </Form>
     )

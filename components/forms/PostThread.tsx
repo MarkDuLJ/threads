@@ -21,7 +21,7 @@ import { ThreadValidation } from "@/lib/validations/thread";
 import { createThread } from "@/lib/actions/thread.actions";
 
 interface Props {
-  userId: string;
+  userId: string
 }
 
 function PostThread({ userId }: Props) {

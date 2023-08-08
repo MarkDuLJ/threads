@@ -10,14 +10,14 @@ async function Page() {
     if(!user) return null
 
     const userInfo = await fetchUser(user.id)
-    console.log(userInfo);
+
 
     if(!userInfo?.onboarded) redirect("/onboarding")
     
     return (
         <>
             <h1 className="text-light-3">new thread is coming</h1>
-            <PostThread userId=""/>
+            <PostThread userId={userInfo._id}/>
         </>
     ) 
 }

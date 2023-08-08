@@ -31,3 +31,13 @@ export async function updateUser({userId,username,name,bio,image,path}:Params):P
     }
 
 }
+
+export async function fetchUser(userId:string){
+    try {
+        connectToDB()
+
+        return await User.findOne({id:userId})
+    } catch (error:any) {
+        throw new Error(`Unable to fecth user:${userId}, the error: ${error.message}`)
+    }
+}

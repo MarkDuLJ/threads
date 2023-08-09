@@ -59,6 +59,48 @@ export async function fetchPosts(pageNumber=1, pageSize=20) {
     const posts = await postsQuery.exec()
 
     const isNext = totalPostCount > skipAmount +posts.length
-
+    
     return {posts,isNext}
 }
+
+export async function fetchPostById(id: string){
+    connectToDB()
+
+    try {
+        const thread = await Thread.findById(id)
+        .populate({
+            path:"author",
+            model:User,
+            select:" _id id name image"
+        })
+        .populate({
+            path: "children", // Populate the children field
+            populate: [
+              {
+                path: "author", // Populate the author field within children
+                model: User,
+                select: "_id id name parentId image", // Select only _id and username fields of the author
+              },
+              {
+                path: "children", // Populate the children field within children
+                model: Thread, // The model of the nested children (assuming it's the same "Thread" model)
+                populate: {
+                  path: "author", // Populate the author field within nested children
+                  model: User,
+                  select: "_id id name parentId image", // Select only _id and username fields of the author
+                },
+              },
+            ],
+          })
+        .exec()
+
+          console.log("XXXXXX",thread);
+          
+          return thread
+    } catch (error) {
+        console.error("error while fetching thread",error)
+        throw new Error("unable to fetch thread")
+        
+    }
+}
+

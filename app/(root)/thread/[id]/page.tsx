@@ -1,9 +1,10 @@
 import { currentUser } from "@clerk/nextjs";
 
 import ThreadCard from "@/components/cards/ThreadCard"
-import { fetchPostById, fetchPosts } from "@/lib/actions/thread.actions";
+import { fetchPostById } from "@/lib/actions/thread.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { redirect } from "next/navigation";
+import Comment from "@/components/forms/Comment";
 
 async function Page({params}:{params:{id:string}}){
     if(!params.id) return null
@@ -29,6 +30,10 @@ async function Page({params}:{params:{id:string}}){
             community={post.community}
             createdAt={post.createdAt}
             comments={post.children}/>
+            </div>
+
+            <div className="mt-7">
+                <Comment  threadId={post.id} currentUserImg={user.imageUrl} currentUserId={JSON.stringify(userInfo._id)}/>
             </div>
         </section>
         

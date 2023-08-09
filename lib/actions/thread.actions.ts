@@ -94,7 +94,6 @@ export async function fetchPostById(id: string){
           })
         .exec()
 
-          console.log("XXXXXX",thread);
           
           return thread
     } catch (error) {
@@ -104,3 +103,29 @@ export async function fetchPostById(id: string){
     }
 }
 
+export async function addCommentToThread(threadId: string, commentText: string, useId: string, path: string){
+    connectToDB()
+
+    try {
+        const orignalThread = await Thread.findById(threadId)
+        if(!orignalThread) throw new Error(`Thread ${threadId} not found`)
+
+        const newComment = new Thread({
+            text:commentText,
+            author: useId,
+            parentId:threadId,
+        })
+
+        // save new created comment as a thread
+        const savedComment = await newComment.save()
+        // update orignal thread to include the new comment
+        orignalThread.children.push(savedComment._id)
+        // save updated original thread
+        await orignalThread.save()
+
+        revalidatePath(path)        
+    } catch (error:any) {
+        throw new Error("Unable to add comment", error);
+  }
+    
+}

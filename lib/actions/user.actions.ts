@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { connectToDB } from "../mongoose"
 import User from "@/lib/models/user.model"
+import Thread from "../models/thread.model"
 
 interface Params{
     userId: string, username:string,name: string, bio:string,image: string, path:string
@@ -39,5 +40,30 @@ export async function fetchUser(userId:string){
         return await User.findOne({id:userId})
     } catch (error:any) {
         throw new Error(`Unable to fecth user:${userId}, the error: ${error.message}`)
+    }
+}
+
+export async  function fetchUserPosts(userId:string) {
+    try {
+        connectToDB()
+
+        // find all thread created by this userId user
+        const threads = await User.findOne({id:userId}).populate({
+            path:"threads",
+            model:Thread,
+            populate:{
+                path:"children",
+                model:Thread,
+                populate:{
+                    path:"author",
+                    model:User,
+                    select:"name image id"
+                }
+            }
+        })
+
+        return threads
+    } catch (error) {
+        throw new Error(`failed to fetch user posts: ${error}`)
     }
 }
